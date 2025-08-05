@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 6px 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, {{ session.username }}!</p>
+
+    <h2>Filter Users</h2>
+    <form method="get" action="{{ url_for('admin_dashboard') }}">
+        <input type="text" name="username" placeholder="Username or Email" value="{{ request.args.get('username', '') }}">
+        <input type="date" name="start_date" value="{{ request.args.get('start_date', '') }}">
+        <input type="date" name="end_date" value="{{ request.args.get('end_date', '') }}">
+        <button type="submit">Filter</button>
+        <a href="{{ url_for('admin_dashboard') }}">Reset</a>
+    </form>
+
+    <h2>Registered Users & Activity</h2>
+    <table>
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Is Admin</th>
+      <th>Event Type</th>
+      <th>Entry Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in logs %}
+    <tr>
+      <td>{{ log.user_id }}</td>
+      <td>{{ log.username }}</td>
+      <td>{{ log.email_id }}</td>
+      <td>{{ 'Yes' if log.is_admin== 1 else 'No'}}</td>
+      <td>{{ log.log_type }}</td>
+      <td>{{ log.entry_time }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f4f7fc;
+      flex-direction: column;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+    }
+
+    aside {
+      width: 240px;
+      background-color: #5e60ce;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100vh;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    aside h2 {
+      margin-bottom: 30px;
+      font-size: 22px;
+    }
+
+    aside nav a {
+      display: block;
+      margin: 15px 0;
+      text-decoration: none;
+      color: #d1d5db;
+      transition: 0.2s;
+    }
+
+    aside nav a:hover {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    main {
+      margin-left: 260px;
+      padding: 30px;
+      flex: 1;
+      width: 100%;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.05);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .card .value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #5e60ce;
+    }
+
+    .chart-placeholder, .pie-placeholder {
+      height: 200px;
+      background: #e0e7ff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4f46e5;
+    }
+
+    .menu-toggle {
+      display: none;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      aside {
+        transform: translateX(-100%);
+        position: absolute;
+        z-index: 1000;
+      }
+
+      aside.show {
+        transform: translateX(0);
+      }
+
+      .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: #5e60ce;
+        padding: 10px;
+        border-radius: 6px;
+        z-index: 1100;
+      }
+
+      main {
+        margin-left: 0;
+        padding-top: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+  <div class="container">
+    <aside id="sidebar">
+      <h2>⚡ Admin Panel</h2>
+      <nav>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('admin_dashboard_view') }}?section=reports">Reports</a>
+        <a href="{{ url_for('admin_authentication') }}">Authentication</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </aside>
+
+    <main>
+
+      <header>
+        <h1>Welcome, Admin</h1>
+      </header>
+
+      <section class="card-grid">
+        <div class="card" style="background: linear-gradient(to right, #fbc2eb, #a6c1ee); color: #333;">
+          <h3>Weekly Visitors</h3>
+          <div class="value">0</div>
+          <small>Increased by 0%</small>
+        </div>
+
+        <div class="card" style="background: linear-gradient(to right, #a1c4fd, #c2e9fb); color: #333;">
+          <h3>Registered Users</h3>
+          <div class="value">0</div>
+          <small>Increased by 0%</small>
+        </div>
+
+        <div class="card" style="background: linear-gradient(to right, #89f7fe, #66a6ff); color: #333;">
+          <h3>Registered Workers</h3>
+          <div class="value">95,741</div>
+          <small>Increased by 0%</small>
+        </div>
+      </section>
+
+      <section class="card-grid" style="margin-top: 30px;">
+        <div class="card">
+          <h3>Visitors Percent</h3>
+          <div class="chart-placeholder">[Bar Chart]</div>
+        </div>
+        <div class="card">
+          <h3>Entry and Exit Logs</h3>
+          <div class="pie-placeholder">[Pie Chart]</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('show');
+    }
+  </script>
+</body>
+</html>

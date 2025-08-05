@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}",method="post">
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <div class="header">
+        <h1 class="word">Welcome, {{ session.username }}!
+            <p class="word">You are now logged in.</p>
+
+            <a class="btn" href="{{ url_for('user_form') }}">click to add personal info</a></h1>
+    </div>
+
+    <div class="border">
+
+        <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+
+    </div>
+
+</body>
+</html>

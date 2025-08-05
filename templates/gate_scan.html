@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gate QR Scan</title>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <style>
+        #reader {
+            width: 300px;
+            margin: auto;
+        }
+        #result-box {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #log-type-toggle {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Scan QR to Enter/Exit</h2>
+
+    <div id="log-type-toggle">
+        <label>
+            <input type="radio" name="log_type" value="entry" checked> Entry
+        </label>
+        <label style="margin-left: 20px;">
+            <input type="radio" name="log_type" value="exit"> Exit
+        </label>
+    </div>
+
+    <div id="reader"></div>
+    <div id="result-box"></div>
+
+    <script>
+        let html5QrcodeScanner;
+
+        function showMessage(message, isSuccess) {
+            const resultBox = document.getElementById("result-box");
+            resultBox.style.color = isSuccess ? "green" : "red";
+            resultBox.innerText = message;
+        }
+
+        function getSelectedLogType() {
+            const radios = document.getElementsByName("log_type");
+            for (let i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    return radios[i].value;
+                }
+            }
+            return "entry"; // default
+        }
+
+        function startScanner() {
+            html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+                fps: 10,
+                qrbox: 250
+            });
+            html5QrcodeScanner.render(onScanSuccess);
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            html5QrcodeScanner.clear(); // Stop scanning
+
+            const logType = getSelectedLogType();
+
+            fetch("http://localhost:5000/verify_qr", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "qr_data=" + encodeURIComponent(decodedText) + "&log_type=" + logType
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.text().then(text => {
+                        showMessage(text, true);
+                    });
+                } else {
+                    return response.text().then(text => {
+                        showMessage(text, false);
+                    });
+                }
+            })
+            .catch(err => {
+
+                showMessage("❌ Error verifying QR code.", false);
+                console.error(err);
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    document.getElementById("result-box").innerText = "";
+                    startScanner(); // Restart scanner
+                }, 4000);
+            });
+        }
+
+        window.onload = () => {
+            startScanner();
+        };
+    </script>
+</body>
+</html>
