@@ -18,9 +18,9 @@ app.secret_key = 'your_secret_key'  # Replace with a strong key
 # Database Configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Spm@12345'
+app.config['MYSQL_PASSWORD'] = '####'
 app.config['MYSQL_DB'] = 'mydb'
-app.config['ADMIN_SECRET_KEY'] = 'Admin_Cosmo'
+app.config['ADMIN_SECRET_KEY'] = '####'
 
 mysql = MySQL(app)
 
@@ -120,7 +120,7 @@ def register():
 
 @app.route('/user_form', methods=['GET', 'POST'])
 def user_form():
-    FERNET_KEY = b'RkM1tBaCso8pXjxjYL7Nc54AuZmmcuL3EeBI9CjjwV0='
+    FERNET_KEY = your-fernet-key
     fernet = Fernet(FERNET_KEY)
     msg = ''
     user_id = None
